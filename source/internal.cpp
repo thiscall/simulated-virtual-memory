@@ -7,4 +7,5 @@ PVOID APIENTRY _internal_alloc(size_t size) {
 }
 void APIENTRY _internal_free(PVOID ptr) {
 	HeapFree(GetProcessHeap(), 0, ptr);
+
 }
