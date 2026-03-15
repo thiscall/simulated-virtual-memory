@@ -17,14 +17,14 @@ LONG APIENTRY _vm_exception_handler(PEXCEPTION_POINTERS excpt) {
 }
 DWORD APIENTRY _vm_direct_commit(PVMINFO pVM, size_t page_offset) {
 	const size_t pos = size_t(pVM->pMem) + (page_offset << 20);
-	LARGE_INTEGER dist = { 0 };
+	LARGE_INTEGER dist;
 	dist.QuadPart = page_offset << 20;
 	void* pt = (void*)pos;
 	DWORD suc = 0;
 	if (!VirtualAlloc(pt, 1Ui64 << 20, MEM_COMMIT, PAGE_READWRITE)) return 0;
 	SetFilePointerEx(pVM->hFile, dist, NULL, FILE_BEGIN);
 	ReadFile(pVM->hFile, pt, 1U << 20, &suc, NULL);
-	if (suc != (1Ui32 << 20)) return 0;
+	if (suc != (1U << 20)) return 0;
 	pVM->pLoadTime[page_offset] = ++(pVM->loadCount);
 	if (pVM->loadCount >= 0xEE000000U) {
 		pVM->loadCount -= 0xE0000000U;
@@ -44,7 +44,7 @@ DWORD APIENTRY _vm_direct_decommit(PVMINFO pVM, size_t page_offset) {
 	const size_t pos = size_t(pVM->pMem) + (page_offset << 20);
 	void* pt = (void*)pos;
 	DWORD suc = 0;
-	LARGE_INTEGER dist = { 0 }; dist.QuadPart = page_offset << 20;
+	LARGE_INTEGER dist; dist.QuadPart = page_offset << 20;
 	SetFilePointerEx(pVM->hFile, dist, NULL, FILE_BEGIN);
 	WriteFile(pVM->hFile, pt, 1U << 20, &suc, NULL);
 	if (suc != (1U << 20)) return 0;

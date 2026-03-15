@@ -25,6 +25,7 @@ DLLEXPORT void APIENTRY vmDestroy(PVOID pVM);
 DLLEXPORT PVOID APIENTRY vmBase(PVOID pVM);
 DLLEXPORT void APIENTRY vmTrim(PVOID pVM);
 //Internal Functions
+void* APIENTRY mymemset(void* base, int ch, size_t n);
 PVOID APIENTRY _internal_alloc(size_t size);
 void APIENTRY _internal_free(PVOID ptr);
 //Page Faults

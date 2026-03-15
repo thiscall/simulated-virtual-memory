@@ -2,7 +2,7 @@
 
 PVOID hVEH = NULL;
 PVMLIST _vm_reg = NULL;
-CRITICAL_SECTION _vmlock = { 0 };
+CRITICAL_SECTION _vmlock;
 BOOL APIENTRY DllMain(HMODULE hModule, DWORD ul_reason_for_call, LPVOID lpReserved)
 {
     switch (ul_reason_for_call)

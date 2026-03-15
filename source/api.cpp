@@ -13,14 +13,14 @@ DLLEXPORT PVOID APIENTRY vmCreate(LPCSTR file, DWORD sizeMB, DWORD bufMB) {
 	int r1 = SetEndOfFile(pVM->hFile);
 	pVM->pMem = VirtualAlloc(NULL, sizeMB << 20, MEM_RESERVE, PAGE_READWRITE);
 	pVM->pLoadTime = (PDWORD)_internal_alloc(sizeMB << 2);
-	if (!pVM->hFile || !pVM->pMem || !r1 || !pVM->pLoadTime) {
+	if (pVM->hFile == INVALID_HANDLE_VALUE || !pVM->pMem || !r1 || !pVM->pLoadTime) {
 		CloseHandle(pVM->hFile);
 		VirtualFree(pVM->pMem, 0, MEM_RELEASE);
 		_internal_free(pVM->pLoadTime);
 		_internal_free(pVM);
 		return NULL;
 	}
-	memset(pVM->pLoadTime, -1, sizeMB << 2);
+	mymemset(pVM->pLoadTime, -1, sizeMB << 2);
 	PVMLIST _head = (PVMLIST)_internal_alloc(sizeof(VMLIST));
 	_head->pVM = pVM, _head->next = _vm_reg;
 	_vm_reg = _head;
